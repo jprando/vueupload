@@ -88,17 +88,12 @@ function dropHandler(event: DragEvent) {
     }
   }
 }
-function dragoverHandle(event: DragEvent) {
+function showFileDropZone(event: DragEvent) {
   event.preventDefault();
   if (state.dragover) return;
   state.dragover = true;
 }
-function dragenterHandler(event: DragEvent) {
-  event.preventDefault();
-  if (state.dragover) return;
-  state.dragover = true;
-}
-function dragleaveHandler(event: DragEvent) {
+function hideFileDropZone(event: DragEvent) {
   event.preventDefault();
   if (!state.dragover) return;
   state.dragover = false;
@@ -113,9 +108,9 @@ function enterEditMode(file: UploadFile) {
     }
   })
 }
-function outEditMode(file: UploadFile) {
+function outEditMode(file: UploadFile, update: boolean = true) {
   file.editMode = false;
-  if (file.editNewName?.trim() && file.editNewName.trim() !== file.newName) {
+  if (update && file.editNewName?.trim() && file.editNewName.trim() !== file.newName) {
     file.newName = file.editNewName.trim()
   }
 }
@@ -130,8 +125,8 @@ const dropZoneStyle = computed(() => ({
 <template>
   <main style="height:300px;width:600px" :style="dropZoneStyle">
 
-    <section style="height:100%;width:100%;overflow-y: auto;" @drop="dropHandler($event)"
-      @dragover="dragoverHandle($event)" @dragenter="dragenterHandler($event)" @dragleave="dragleaveHandler($event)">
+    <section style="height:100%;width:100%;overflow-y: auto;" @drop="dropHandler" @dragover="showFileDropZone"
+      @dragenter="showFileDropZone" @dragleave="hideFileDropZone">
 
       <p> Arraste e solte um ou mais arquivos aqui.</p>
 
@@ -142,10 +137,10 @@ const dropZoneStyle = computed(() => ({
         <span style="padding-right:12px;width:120px;text-align:left">{{ file.sizeHuman }}</span>
 
         <input ref="fileNameInput" v-if="file.editMode" type="text" style="width:100%" v-model="file.editNewName"
-          @keydown.enter="outEditMode(file)" @keydown.esc="outEditMode(file)" @blur="outEditMode(file)" />
+          @keydown.enter="outEditMode(file)" @keydown.esc="outEditMode(file, false)" @blur="outEditMode(file, false)" />
       <div v-else style="width:100%;text-align:left;cursor: pointer;user-select: none;"
         title="clique para editar o nome do arquivo" @click="enterEditMode(file)">
-        {{ file.newName }}{{ file.extension ? '.' : '' }}{{ file.extension ? file.extension : '' }}
+        {{ file.newName }}{{ file.extension ? `.${file.extension}` : '' }}
       </div>
       <!-- <button @click="file.editMode = true">renomear</button> -->
 
