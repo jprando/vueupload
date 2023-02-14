@@ -89,14 +89,17 @@ function dropHandler(event: DragEvent) {
 }
 function dragoverHandle(event: DragEvent) {
   event.preventDefault();
+  if (state.dragover) return;
   state.dragover = true;
 }
 function dragenterHandler(event: DragEvent) {
   event.preventDefault();
+  if (state.dragover) return;
   state.dragover = true;
 }
 function dragleaveHandler(event: DragEvent) {
   event.preventDefault();
+  if (!state.dragover) return;
   state.dragover = false;
 }
 function enterEditMode(file: UploadFile) {
@@ -108,6 +111,12 @@ function enterEditMode(file: UploadFile) {
       (fileNameInput.value[0] as any).focus();
     }
   })
+}
+function outEditMode(file: UploadFile) {
+  file.editMode = false;
+  if (file.editNewName?.trim() && file.editNewName.trim() !== file.newName) {
+    file.newName = file.editNewName.trim()
+  }
 }
 // COMPUTEDs
 const dropZoneStyle = computed(() => ({
@@ -132,8 +141,7 @@ const dropZoneStyle = computed(() => ({
         <span style="padding-right:12px;width:120px;text-align:left">{{ file.sizeHuman }}</span>
 
         <input ref="fileNameInput" v-if="file.editMode" type="text" style="width:100%" v-model="file.editNewName"
-          @keydown.enter="file.editMode = false; if (file.editNewName?.trim()) { file.newName = file.editNewName }"
-          @keydown.esc="file.editMode = false;" @blur="file.editMode = false;" />
+          @keydown.enter="outEditMode(file)" @keydown.esc="outEditMode(file)" @blur="outEditMode(file)" />
       <div v-else style="width:100%;text-align:left;cursor: pointer;user-select: none;"
         title="clique para editar o nome do arquivo" @click="enterEditMode(file)">
         {{ file.newName }}{{ file.extension ? '.' : '' }}{{ file.extension ? file.extension : '' }}
