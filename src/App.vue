@@ -52,7 +52,7 @@ function dropHandler(event: DragEvent) {
       const fileItem = dataItem;
       // console.log("#24 fileItem", fileItem)
       const file = fileItem.getAsFile()
-      if (!file) continue;
+      if (!file || !file.size) continue; // file.size igual a zero é uma pasta
       let fileNameSplit: string[] = file.name.split('.');
       const fileInfo: UploadFile = {
         editMode: false,
