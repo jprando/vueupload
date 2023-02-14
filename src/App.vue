@@ -1,4 +1,7 @@
 <script setup lang="ts">
+
+// TODO validar arquivos com tamanho 0 bytes
+
 import type { Component } from 'vue';
 import { ref, reactive, computed, nextTick } from 'vue';
 import { FileCheck, FileDocument, FileMusic, FileSpreadsheet, FileStar, FileText, FileZip } from "./components/icons"
@@ -63,7 +66,7 @@ function dropHandler(event: DragEvent) {
         fileInfo.extension = "";
       }
       state.files.push(fileInfo)
-      console.log("#48 file.type", file.type)
+      // console.log("#48 file.type", file.type)
     }
   } else {
     for (let idx = 0; idx < dataTransfer.files.length; idx++) {
@@ -99,8 +102,8 @@ function enterEditMode(file: UploadFile) {
   file.editNewName = file.newName;
   file.editMode = true;
   nextTick(() => {
-    console.log("#101 fileNameInput.value", fileNameInput.value)
-    if (fileNameInput.value && fileNameInput.value[0]) {
+    // console.log("#101 fileNameInput.value", fileNameInput.value)
+    if (fileNameInput.value && Array.isArray(fileNameInput.value) && fileNameInput.value[0]) {
       (fileNameInput.value[0] as any).focus();
     }
   })
@@ -116,7 +119,7 @@ const dropZoneStyle = computed(() => ({
 <template>
   <main style="height:300px;width:600px" :style="dropZoneStyle">
 
-    <section style="height:100%;width:100%" @drop="dropHandler($event)" @dragover="dragoverHandle($event)"
+    <section style="height:100%;width:100%;overflow-y: auto;" @drop="dropHandler($event)" @dragover="dragoverHandle($event)"
       @dragenter="dragenterHandler($event)" @dragleave="dragleaveHandler($event)">
 
       <p> Arraste e solte um ou mais arquivos aqui.</p>
