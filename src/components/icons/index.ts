@@ -1,0 +1,9 @@
+export { default as FileCheck } from './FileCheck.vue';
+export { default as FileDocument } from './FileDocument.vue';
+export { default as FileMusic } from './FileMusic.vue';
+export { default as FileOff } from './FileOff.vue';
+export { default as FileSpreadsheet } from './FileSpreadsheet.vue';
+export { default as FileStar } from './FileStar.vue';
+export { default as FileText } from './FileText.vue';
+export { default as FileUpload } from './FileUpload.vue';
+export { default as FileZip } from './FileZip.vue';
