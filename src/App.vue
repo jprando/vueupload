@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 // TODO validar arquivos com tamanho 0 bytes
+// TODO validar newName duplicados
 
 import type { Component } from 'vue';
 import { ref, reactive, computed, nextTick } from 'vue';
@@ -119,8 +120,8 @@ const dropZoneStyle = computed(() => ({
 <template>
   <main style="height:300px;width:600px" :style="dropZoneStyle">
 
-    <section style="height:100%;width:100%;overflow-y: auto;" @drop="dropHandler($event)" @dragover="dragoverHandle($event)"
-      @dragenter="dragenterHandler($event)" @dragleave="dragleaveHandler($event)">
+    <section style="height:100%;width:100%;overflow-y: auto;" @drop="dropHandler($event)"
+      @dragover="dragoverHandle($event)" @dragenter="dragenterHandler($event)" @dragleave="dragleaveHandler($event)">
 
       <p> Arraste e solte um ou mais arquivos aqui.</p>
 
@@ -131,9 +132,8 @@ const dropZoneStyle = computed(() => ({
         <span style="padding-right:12px;width:120px;text-align:left">{{ file.sizeHuman }}</span>
 
         <input ref="fileNameInput" v-if="file.editMode" type="text" style="width:100%" v-model="file.editNewName"
-          @keydown.enter="file.editMode = false; file.newName = file.editNewName"
-          @keydown.esc="file.editMode = false;"
-          @blur="file.editMode = false;" />
+          @keydown.enter="file.editMode = false; if (file.editNewName?.trim()) { file.newName = file.editNewName }"
+          @keydown.esc="file.editMode = false;" @blur="file.editMode = false;" />
       <div v-else style="width:100%;text-align:left;cursor: pointer;user-select: none;"
         title="clique para editar o nome do arquivo" @click="enterEditMode(file)">
         {{ file.newName }}{{ file.extension ? '.' : '' }}{{ file.extension ? file.extension : '' }}
