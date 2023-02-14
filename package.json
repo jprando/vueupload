@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "build": "vue-tsc && vite build --base=/vueupload",
+    "preview": "vite preview",
+    "prebuild": "rm -rf dist",
+    "postbuild": "rm -rf docs && mv dist docs && git add -f docs"
   },
   "dependencies": {
     "vue": "^3.2.45"
