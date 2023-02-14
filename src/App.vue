@@ -2,6 +2,7 @@
 
 // TODO validar arquivos com tamanho 0 bytes
 // TODO validar newName duplicados
+// TODO validar se o nome do arquivo é um nome de arquivo valido, certos caracteres nao pode ser utilizados no nome do arquivo
 
 import type { Component } from 'vue';
 import { ref, reactive, computed, nextTick } from 'vue';
